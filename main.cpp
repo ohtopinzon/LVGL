@@ -15,6 +15,7 @@
 #include "src/command-interface.h"
 #include <stdlib.h>
 #include <signal.h>
+#include "lvgl/examples/lv_examples.h"
 
 #define H_RES (1280)
 #define V_RES (720)
@@ -47,6 +48,20 @@ bool close_cb(lv_disp_t * disp)
 }
 
 
+/**
+ * Open a video from a file
+ */
+void lv_example_ffmpeg(void)
+{
+    /*birds.mp4 is downloaded from http://www.videezy.com (Free Stock Footage by Videezy!)
+     *https://www.videezy.com/abstract/44864-silhouettes-of-birds-over-the-sunset*/
+    lv_obj_t * player = lv_ffmpeg_player_create(lv_scr_act());
+    lv_ffmpeg_player_set_src(player, "./lvgl/examples/libs/ffmpeg/birds.mp4");
+    lv_ffmpeg_player_set_auto_restart(player, true);
+    lv_ffmpeg_player_set_cmd(player, LV_FFMPEG_PLAYER_CMD_START);
+    lv_obj_center(player);
+}
+
 int main(void)
 {
 	lv_disp_t * disp;
@@ -66,7 +81,8 @@ int main(void)
     static lv_color_t buf[DISP_BUF_SIZE];
 
     /* Demo init */
-    ui_ext_init();
+//    ui_ext_init();
+	lv_example_ffmpeg();
 	startCommandInterface();
 
     /*Handle LitlevGL tasks (tickless mode)*/
