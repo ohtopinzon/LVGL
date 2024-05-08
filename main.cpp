@@ -16,6 +16,8 @@
 #include <stdlib.h>
 #include <signal.h>
 #include "lvgl/examples/lv_examples.h"
+#include <libavcodec/avcodec.h>
+#include <libswscale/swscale.h>
 
 #define H_RES (1280)
 #define V_RES (720)
