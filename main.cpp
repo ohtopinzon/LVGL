@@ -85,7 +85,7 @@ int main(void)
     /* Demo init */
 //    ui_ext_init();
 	lv_example_ffmpeg();
-	startCommandInterface();
+//	startCommandInterface();
 
     /*Handle LitlevGL tasks (tickless mode)*/
     while(1) 

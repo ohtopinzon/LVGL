@@ -10,7 +10,7 @@ LVGL_DIR_NAME = lvgl
 LVGL_DIR = ${shell pwd}
 CPPFLAGS = -I$(LVGL_DIR)/ -I$(INC_DIR_SRC)/ -I$(INC_DIR_GENERATED)/ -g3 -ggdb -O0
 CFLAGS = -O0 -g3 -ggdb -I$(LVGL_DIR)/ -I$(INC_DIR_SRC)/ -I$(INC_DIR_GENERATED)/ -Wall -Wshadow -Wundef -Wmissing-prototypes -Wno-discarded-qualifiers -Wall -Wextra -Wno-unused-function -Wno-error=strict-prototypes -Wpointer-arith -fno-strict-aliasing -Wno-error=cpp -Wuninitialized -Wmaybe-uninitialized -Wno-unused-parameter -Wno-missing-field-initializers -Wtype-limits -Wsizeof-pointer-memaccess -Wno-format-nonliteral -Wno-cast-qual -Wunreachable-code -Wno-switch-default -Wreturn-type -Wmultichar -Wformat-security -Wno-ignored-qualifiers -Wno-error=pedantic -Wno-sign-compare -Wno-error=missing-prototypes -Wdouble-promotion -Wclobbered -Wdeprecated -Wempty-body -Wtype-limits -Wshift-negative-value -Wstack-usage=2048 -Wno-unused-value -Wno-unused-parameter -Wno-missing-field-initializers -Wuninitialized -Wmaybe-uninitialized -Wall -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -Wtype-limits -Wsizeof-pointer-memaccess -Wno-format-nonliteral -Wpointer-arith -Wno-cast-qual -Wmissing-prototypes -Wunreachable-code -Wno-switch-default -Wreturn-type -Wmultichar -Wno-discarded-qualifiers -Wformat-security -Wno-ignored-qualifiers -Wno-sign-compare -DLV_USE_FFMPEG
-LDFLAGS = -lm -lwayland-client -lxkbcommon -lwayland-cursor -lrt -Llv_drivers/wayland/protocols/libdf-wayland-xdg-application-stable-latest
+LDFLAGS = -lm -lwayland-client -lxkbcommon -lwayland-cursor -lrt -Llv_drivers/wayland/protocols/libdf-wayland-xdg-application-stable-latest -lavformat -lavcodec -lswscale -lavutil -lswresample
 
 #BIN = $(BIN_DIR)/demo
 BIN_DIR = ./bin
@@ -18,7 +18,7 @@ OBJ_DIR = ./obj
 INC_DIR_SRC = ./src
 INC_DIR_GENERATED = ./src/generated
 
-BIN = smart-kitchen-gui
+BIN = ffmpeg-test
 
 #Collect the files to compile
 #MAINSRC = ./main.c
@@ -67,7 +67,7 @@ default: $(AOBJS) $(COBJS) main.o command-interface.o command-handler.o kitchen-
 	
 	mkdir smart-kitchen-deploy
 	cp -r misc/conf/ misc/scripts/* smart-kitchen-deploy/
-	mv smart-kitchen-gui smart-kitchen-deploy/
+	mv $(BIN) smart-kitchen-deploy/
 	
 	@mkdir -p obj_files
 	@mv *.o ./obj_files/
