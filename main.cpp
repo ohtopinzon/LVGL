@@ -11,8 +11,6 @@
 #include <pthread.h>
 #include <time.h>
 #include <sys/time.h>
-#include "src/ui_ext.h"
-#include "src/command-interface.h"
 #include <stdlib.h>
 #include <signal.h>
 #include "lvgl/examples/lv_examples.h"
@@ -83,7 +81,6 @@ int main(void)
     static lv_color_t buf[DISP_BUF_SIZE];
 
     /* Demo init */
-//    ui_ext_init();
 //	lv_example_ffmpeg();
 	lv_demo_widgets();
 
