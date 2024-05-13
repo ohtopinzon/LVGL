@@ -1,0 +1,99 @@
+From 6159ae62c8d9025769c0b80be8f59451cde79344 Mon Sep 17 00:00:00 2001
+From: Ohtokani Pinzon <ohtokani.pinzon@nxp.com>
+Date: Mon, 13 May 2024 13:18:37 -0700
+Subject: [PATCH] Modified widgets demo to stream video using ffmpeg
+
+Signed-off-by: Ohtokani Pinzon <ohtokani.pinzon@nxp.com>
+---
+ demos/widgets/lv_demo_widgets.c | 19 ++++++++++++++++++-
+ 1 file changed, 18 insertions(+), 1 deletion(-)
+
+diff --git a/demos/widgets/lv_demo_widgets.c b/demos/widgets/lv_demo_widgets.c
+index 839b999c0..3194c313f 100644
+--- a/demos/widgets/lv_demo_widgets.c
++++ b/demos/widgets/lv_demo_widgets.c
+@@ -252,6 +252,14 @@ static void profile_create(lv_obj_t * parent)
+     lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
+ 
+     /*Create the second panel*/
++
++    lv_obj_t * panel2 = lv_ffmpeg_player_create(lv_scr_act());
++    lv_ffmpeg_player_set_src(panel2, "./lvgl/examples/libs/ffmpeg/birds.mp4");
++    lv_ffmpeg_player_set_auto_restart(panel2, true);
++//    lv_ffmpeg_player_set_cmd(player, LV_FFMPEG_PLAYER_CMD_START);
++//    lv_obj_center(player);
++
++	#if 0
+     lv_obj_t * panel2 = lv_obj_create(parent);
+     lv_obj_set_height(panel2, LV_SIZE_CONTENT);
+ 
+@@ -292,6 +300,7 @@ static void profile_create(lv_obj_t * parent)
+     lv_obj_t * birthdate = lv_textarea_create(panel2);
+     lv_textarea_set_one_line(birthdate, true);
+     lv_obj_add_event_cb(birthdate, birthday_event_cb, LV_EVENT_ALL, NULL);
++	#endif
+ 
+     /*Create the third panel*/
+     lv_obj_t * panel3 = lv_obj_create(parent);
+@@ -357,6 +366,7 @@ static void profile_create(lv_obj_t * parent)
+         lv_obj_set_grid_cell(invite_btn, LV_GRID_ALIGN_STRETCH, 5, 1, LV_GRID_ALIGN_CENTER, 3, 2);
+ 
+         lv_obj_set_grid_cell(panel2, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 1, 1);
++		#if 0
+         lv_obj_set_grid_dsc_array(panel2, grid_2_col_dsc, grid_2_row_dsc);
+         lv_obj_set_grid_cell(panel2_title, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_CENTER, 0, 1);
+         lv_obj_set_grid_cell(user_name, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_CENTER, 3, 1);
+@@ -367,7 +377,7 @@ static void profile_create(lv_obj_t * parent)
+         lv_obj_set_grid_cell(birthday_label, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 5, 1);
+         lv_obj_set_grid_cell(gender, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_CENTER, 6, 1);
+         lv_obj_set_grid_cell(gender_label, LV_GRID_ALIGN_START, 0, 1, LV_GRID_ALIGN_START, 5, 1);
+-
++		#endif
+ 
+         lv_obj_set_grid_cell(panel3, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
+         lv_obj_set_grid_dsc_array(panel3, grid_2_col_dsc, grid_2_row_dsc);
+@@ -430,6 +440,7 @@ static void profile_create(lv_obj_t * parent)
+         lv_obj_set_grid_cell(invite_btn, LV_GRID_ALIGN_END, 3, 1, LV_GRID_ALIGN_CENTER, 5, 1);
+ 
+         lv_obj_set_grid_cell(panel2, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 1, 1);
++		#if 0
+         lv_obj_set_grid_dsc_array(panel2, grid_2_col_dsc, grid_2_row_dsc);
+         lv_obj_set_grid_cell(panel2_title, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_CENTER, 0, 1);
+         lv_obj_set_grid_cell(user_name_label, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_START, 2, 1);
+@@ -440,6 +451,7 @@ static void profile_create(lv_obj_t * parent)
+         lv_obj_set_grid_cell(birthdate, LV_GRID_ALIGN_STRETCH, 0, 2, LV_GRID_ALIGN_START, 7, 1);
+         lv_obj_set_grid_cell(gender_label, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_START, 8, 1);
+         lv_obj_set_grid_cell(gender, LV_GRID_ALIGN_STRETCH, 0, 2, LV_GRID_ALIGN_START, 9, 1);
++		#endif
+ 
+         lv_obj_set_grid_cell(panel3, LV_GRID_ALIGN_STRETCH, 1, 1, LV_GRID_ALIGN_STRETCH, 1, 1);
+         lv_obj_set_grid_dsc_array(panel3, grid_2_col_dsc, grid_2_row_dsc);
+@@ -504,6 +516,7 @@ static void profile_create(lv_obj_t * parent)
+         lv_obj_set_grid_cell(invite_btn, LV_GRID_ALIGN_STRETCH, 0, 2, LV_GRID_ALIGN_CENTER, 6, 1);
+ 
+         lv_obj_set_grid_cell(panel2, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 1, 1);
++		#if 0
+         lv_obj_set_grid_cell(panel2_title, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_CENTER, 0, 1);
+         lv_obj_set_grid_cell(user_name_label, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_START, 2, 1);
+         lv_obj_set_grid_cell(user_name, LV_GRID_ALIGN_STRETCH, 0, 2, LV_GRID_ALIGN_START, 3, 1);
+@@ -513,6 +526,7 @@ static void profile_create(lv_obj_t * parent)
+         lv_obj_set_grid_cell(birthdate, LV_GRID_ALIGN_STRETCH, 0, 2, LV_GRID_ALIGN_START, 7, 1);
+         lv_obj_set_grid_cell(gender_label, LV_GRID_ALIGN_START, 0, 2, LV_GRID_ALIGN_START, 8, 1);
+         lv_obj_set_grid_cell(gender, LV_GRID_ALIGN_STRETCH, 0, 2, LV_GRID_ALIGN_START, 9, 1);
++		#endif
+ 
+         lv_obj_set_height(panel3, LV_SIZE_CONTENT);
+         lv_obj_set_grid_cell(panel3, LV_GRID_ALIGN_STRETCH, 0, 1, LV_GRID_ALIGN_START, 2, 1);
+@@ -524,6 +538,9 @@ static void profile_create(lv_obj_t * parent)
+         lv_obj_set_grid_cell(team_player_label, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 4, 1);
+         lv_obj_set_grid_cell(sw2, LV_GRID_ALIGN_START, 1, 1, LV_GRID_ALIGN_START, 5, 1);
+     }
++
++    lv_ffmpeg_player_set_cmd(panel2, LV_FFMPEG_PLAYER_CMD_START);
++	lv_obj_align(panel2, LV_ALIGN_BOTTOM_LEFT, 0, -20);
+ }
+ 
+ 
+-- 
+2.25.1
+

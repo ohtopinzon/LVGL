@@ -54,13 +54,12 @@ main.o: main.cpp
 default: $(AOBJS) $(COBJS) main.o
 	$(CXX) -o $(BIN) main.o $(AOBJS) $(COBJS) $(LDFLAGS)
 	
-	mkdir smart-kitchen-deploy
-	cp -r misc/conf/ misc/scripts/* smart-kitchen-deploy/
-	mv $(BIN) smart-kitchen-deploy/
+	mkdir deploy
+	mv $(BIN) deploy/
 	
 	@mkdir -p obj_files
 	@mv *.o ./obj_files/
 	
 .PHONY: clean
 clean: 
-	rm -rf $(BIN) $(AOBJS) $(COBJS) main.o obj_files/ smart-kitchen-deploy/
+	rm -rf $(BIN) $(AOBJS) $(COBJS) main.o obj_files/ deploy/

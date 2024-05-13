@@ -81,8 +81,8 @@ int main(void)
     static lv_color_t buf[DISP_BUF_SIZE];
 
     /* Demo init */
-	lv_example_ffmpeg();
-//	lv_demo_widgets();
+//	lv_example_ffmpeg();
+	lv_demo_widgets();
 
     /*Handle LitlevGL tasks (tickless mode)*/
     while(1) 
