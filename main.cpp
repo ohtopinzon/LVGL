@@ -30,7 +30,6 @@ void sig_handler(int signum)
     lv_deinit();
     lv_wayland_deinit();
 	
-	system("/home/root/.nxp-demo-experience/scripts/multimedia/smart-kitchen/restore.sh");	
 	exit(0);
 }
 
@@ -43,7 +42,6 @@ bool close_cb(lv_disp_t * disp)
     lv_deinit();
     lv_wayland_deinit();
 	
-	system("/home/root/.nxp-demo-experience/scripts/multimedia/smart-kitchen/restore.sh");	
     exit(0);
 }
 
