@@ -71,6 +71,7 @@ int main(void)
     /*Linux Wayland device init*/
     lv_wayland_init();
     disp = lv_wayland_create_window(H_RES, V_RES, "Window Title", close_cb);
+	lv_disp_set_bg_opa(disp, 128);
 
 	printf("Disp %d \n", disp);
     //lv_wayland_window_set_fullscreen(disp, true);

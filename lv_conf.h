@@ -19,7 +19,7 @@
 //#define LV_VER_RES_MAX (272)
 
 /*Color depth: 1 (1 byte per pixel), 8 (RGB332), 16 (RGB565), 32 (ARGB8888)*/
-#define LV_COLOR_DEPTH 16
+#define LV_COLOR_DEPTH 32
 
 /*Swap the 2 bytes of RGB565 color. Useful if the display has an 8-bit interface (e.g. SPI)*/
 #define LV_COLOR_16_SWAP 0
@@ -44,7 +44,7 @@
 #define LV_MEM_CUSTOM 0
 #if LV_MEM_CUSTOM == 0
 /*Size of the memory available for `lv_mem_alloc()` in bytes (>= 2kB)*/
-#define LV_MEM_SIZE (4 * 1024U * 1024U)
+#define LV_MEM_SIZE (40 * 1024U * 1024U)
 #else     /* LV_MEM_CUSTOM */
 /*Header for the dynamic memory function*/
 #define LV_MEM_CUSTOM_INCLUDE <stdlib.h>
