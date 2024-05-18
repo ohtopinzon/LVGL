@@ -6,6 +6,7 @@
 #include "lvgl/lvgl.h"
 #include "lvgl/demos/lv_demos.h"
 #include "lv_drivers/display/fbdev.h"
+#include "lv_drivers/wayland/wayland.h"  
 #include "lv_drivers/indev/evdev.h"
 #include <unistd.h>
 #include <pthread.h>
@@ -57,6 +58,7 @@ int main(void)
     /*LittlevGL init*/
     lv_init();
 
+#if 0 /*framebuffer*/
 	/*Linux frame buffer device init*/
 	fbdev_init();
 	
@@ -75,13 +77,45 @@ int main(void)
     disp_drv.hor_res    = H_RES;
     disp_drv.ver_res    = V_RES;
     disp = lv_disp_drv_register(&disp_drv);    
+#endif
+#if 1 /*wayland*/	
+    lv_wayland_init();
+    disp = lv_wayland_create_window(H_RES, V_RES, "Window Title", close_cb);
+#endif
 
 	printf("Disp %d \n", disp);
 
-
+//	lv_obj_set_style(lv_scr_act(), &lv_style_transp);
+	lv_disp_set_bg_opa(NULL, LV_OPA_TRANSP);
+//	lv_obj_set_style_local_bg_opa(lv_scr_act(), LV_OBJMASK_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_TRANSP);
+	lv_obj_set_style_bg_opa(lv_scr_act(), LV_OPA_TRANSP, LV_PART_MAIN);
     /* Demo init */
-	lv_demo_widgets();
 
+	//lv_demo_widgets();
+    static lv_style_t style_orange;
+    lv_style_init(&style_orange);
+    lv_style_set_bg_color(&style_orange, lv_color_make(249, 141, 0)); // BLUE RED GREEN 
+    lv_style_set_bg_opa(&style_orange, LV_OPA_COVER);
+
+
+	lv_obj_t * btn1 = lv_btn_create(lv_scr_act());                   /*Add a button to the current screen*/
+	lv_obj_set_pos(btn1, 10, V_RES - 60);                                    /*Set its position*/
+	lv_obj_set_size(btn1, 100, 50);                                  /*Set its size*/
+
+	lv_obj_t * label = lv_label_create(btn1);                        /*Add a label to the button*/
+	lv_label_set_text(label, "Button 1");                             /*Set the labels text*/
+	lv_obj_center(label);                                           /*Align the label to the center*/
+
+	lv_obj_t * btn2 = lv_btn_create(lv_scr_act());                   /*Add a button to the current screen*/
+	lv_obj_set_pos(btn2, H_RES - 110, V_RES - 60);                                    /*Set its position*/
+	lv_obj_set_size(btn2, 100, 50);                                  /*Set its size*/
+	
+	lv_obj_t * label2 = lv_label_create(btn2);                        /*Add a label to the button*/
+	lv_label_set_text(label2, "Button 2");                             /*Set the labels text*/
+	lv_obj_center(label2);                                           /*Align the label to the center*/
+
+    lv_obj_add_style(btn1, &style_orange, 0);
+    lv_obj_add_style(btn2, &style_orange, 0);
     /*Handle LitlevGL tasks (tickless mode)*/
     while(1) 
     {
