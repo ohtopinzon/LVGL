@@ -17,10 +17,16 @@
 #include "lvgl/examples/lv_examples.h"
 #include <cstdio>
 
-#define H_RES 1280
-#define V_RES 720
+#define H_RES 1080
+#define V_RES 1920
 
-#define DISP_BUF_SIZE H_RES * V_RES * 4
+#define DISP_BUF_SIZE H_RES * V_RES * 4 * 2
+
+//Global variables
+lv_obj_t * label1;
+lv_obj_t * label2;
+lv_obj_t * label3;
+
 
 void sig_handler(int signum)
 {
@@ -45,10 +51,34 @@ bool close_cb(lv_disp_t * disp)
     exit(0);
 }
 
+typedef struct{
+	char *plate;
+	char *message;	
+	bool pass;
+}user_type;
+
+int render_output(char* plate, char* message, bool pass)
+{	
+    lv_label_set_text_fmt(label2, "%s", plate);
+    lv_label_set_text_fmt(label3, "%s", message);
+
+	if(pass) lv_obj_set_style_bg_color(lv_scr_act(), lv_palette_main(LV_PALETTE_GREEN), LV_PART_MAIN);
+	else lv_obj_set_style_bg_color(lv_scr_act(), lv_palette_main(LV_PALETTE_RED), LV_PART_MAIN);
+	lv_obj_invalidate(lv_scr_act());
+	sleep(5);
+
+    lv_label_set_text(label1, "");
+    lv_label_set_text(label2, "");
+    lv_label_set_text(label3, "");
+	lv_obj_set_style_bg_color(lv_scr_act(), LV_COLOR_MAKE(0xFF, 0xFF, 0xFF), LV_PART_MAIN);
+	lv_obj_invalidate(lv_scr_act());
+	return 0;
+}
 
 /**
  * Open a video from a file
  */
+
 
 int main(void)
 {
@@ -86,36 +116,62 @@ int main(void)
 	printf("Disp %d \n", disp);
 
 //	lv_obj_set_style(lv_scr_act(), &lv_style_transp);
-	lv_disp_set_bg_opa(NULL, LV_OPA_TRANSP);
+//	lv_disp_set_bg_opa(NULL, LV_OPA_TRANSP);
 //	lv_obj_set_style_local_bg_opa(lv_scr_act(), LV_OBJMASK_PART_MAIN, LV_STATE_DEFAULT, LV_OPA_TRANSP);
-	lv_obj_set_style_bg_opa(lv_scr_act(), LV_OPA_TRANSP, LV_PART_MAIN);
-    /* Demo init */
-
-	//lv_demo_widgets();
-    static lv_style_t style_orange;
-    lv_style_init(&style_orange);
-    lv_style_set_bg_color(&style_orange, lv_color_make(249, 141, 0)); // BLUE RED GREEN 
-    lv_style_set_bg_opa(&style_orange, LV_OPA_COVER);
+//	lv_obj_set_style_bg_opa(lv_scr_act(), LV_OPA_TRANSP, LV_PART_MAIN);
 
 
-	lv_obj_t * btn1 = lv_btn_create(lv_scr_act());                   /*Add a button to the current screen*/
-	lv_obj_set_pos(btn1, 10, V_RES - 60);                                    /*Set its position*/
-	lv_obj_set_size(btn1, 100, 50);                                  /*Set its size*/
+	static lv_style_t style;
 
-	lv_obj_t * label = lv_label_create(btn1);                        /*Add a label to the button*/
-	lv_label_set_text(label, "Button 1");                             /*Set the labels text*/
-	lv_obj_center(label);                                           /*Align the label to the center*/
+	lv_style_init(&style);
+  
+	lv_style_set_text_font(&style, &lv_font_montserrat_48);
+	lv_style_set_text_color(&style, lv_color_white());
 
-	lv_obj_t * btn2 = lv_btn_create(lv_scr_act());                   /*Add a button to the current screen*/
-	lv_obj_set_pos(btn2, H_RES - 110, V_RES - 60);                                    /*Set its position*/
-	lv_obj_set_size(btn2, 100, 50);                                  /*Set its size*/
-	
-	lv_obj_t * label2 = lv_label_create(btn2);                        /*Add a label to the button*/
-	lv_label_set_text(label2, "Button 2");                             /*Set the labels text*/
-	lv_obj_center(label2);                                           /*Align the label to the center*/
 
-    lv_obj_add_style(btn1, &style_orange, 0);
-    lv_obj_add_style(btn2, &style_orange, 0);
+    label1 = lv_label_create(lv_scr_act());
+    lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP);     /*Break the long lines*/
+    lv_label_set_recolor(label1, true);                      /*Enable re-coloring by commands in the text*/
+    lv_label_set_text(label1, "PLACAS:");
+	lv_obj_add_style(label1, &style, 0);
+    lv_obj_set_width(label1, 500);  /*Set smaller width to make the lines wrap*/
+    lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_align(label1, LV_ALIGN_TOP_MID, -170, 100);
+
+    label2 = lv_label_create(lv_scr_act());
+    lv_label_set_long_mode(label2, LV_LABEL_LONG_WRAP);     /*Break the long lines*/
+    lv_label_set_recolor(label2, true);                      /*Enable re-coloring by commands in the text*/
+	lv_obj_add_style(label2, &style, 0);
+    lv_obj_set_width(label2, 500);  /*Set smaller width to make the lines wrap*/
+    lv_obj_set_style_text_align(label2, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_align(label2, LV_ALIGN_TOP_MID, -170, 200);
+
+
+    label3 = lv_label_create(lv_scr_act());
+    lv_label_set_long_mode(label3, LV_LABEL_LONG_WRAP);     /*Break the long lines*/
+    lv_label_set_recolor(label3, true);                      /*Enable re-coloring by commands in the text*/
+	lv_obj_add_style(label3, &style, 0);
+    lv_obj_set_width(label3, 600);  /*Set smaller width to make the lines wrap*/
+    lv_obj_set_style_text_align(label3, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_align(label3, LV_ALIGN_TOP_MID, -170, 800);
+
+    LV_IMG_DECLARE(logo_palomar);
+    lv_obj_t * img1 = lv_img_create(lv_scr_act());
+    lv_img_set_src(img1, &logo_palomar);
+    lv_obj_align(img1, LV_ALIGN_CENTER, -190, -400);
+    lv_obj_set_size(img1, 740, 292);
+
+	lv_obj_set_style_bg_color(lv_scr_act(), LV_COLOR_MAKE(0xFF, 0xFF, 0xFF), LV_PART_MAIN);
+
+    sleep(5);
+
+	char plate[]="AAAAAA\n";
+	char message[]="Bienvenido\n";
+	bool pass=true;
+
+	render_output(plate, message, pass);
+//	lv_img_set_zoom(img1, 10);
+
     /*Handle LitlevGL tasks (tickless mode)*/
     while(1) 
     {

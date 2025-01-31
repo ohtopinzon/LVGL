@@ -47,15 +47,19 @@ all: default
 #@mkdir obj_files
 #@mv $(OBJS) ./obj_files/
 
+
+logo-palomar.o: images/logo-palomar.c
+	$(CC) $(CFLAGS) -c $< -o $@
+    
 main.o: main.cpp
 	$(CXX) $(CPPFLAGS) -c -g $< -o $@
 
 .PHONY: default
-default: $(AOBJS) $(COBJS) main.o
-	$(CXX) -o $(BIN) main.o $(AOBJS) $(COBJS) $(LDFLAGS)
-	
+default: $(AOBJS) $(COBJS) main.o logo-palomar.o
+	$(CXX) -o $(BIN) main.o $(AOBJS) $(COBJS) logo-palomar.o $(LDFLAGS)
 	mkdir deploy
-	mv $(BIN) deploy/
+	tar -czvf lvgl-demo.tar.gz $(BIN)
+	mv $(BIN) lvgl-demo.tar.gz deploy/
 	
 	@mkdir -p obj_files
 	@mv *.o ./obj_files/
