@@ -106,7 +106,7 @@ int main(void)
 //	pthread_mutex_init(&mutex, NULL);
 	system("rm /dev/mqueue/voice_queue");
 
-    pthread_create(&thread1, NULL, &sendingThread, NULL);
+//    pthread_create(&thread1, NULL, &sendingThread, NULL);
 	printf("Sending Thread Created\r\n");
 	pthread_create(&thread2, NULL, &renderingThread, NULL);
 	printf("Rendering Thread Created\r\n");
@@ -210,9 +210,9 @@ void* renderingThread(void* args)
     lv_img_set_src(img1, &logo_palomar);
     lv_obj_align(img1, LV_ALIGN_CENTER, -190, -400);
     lv_obj_set_size(img1, 740, 292);
-	lv_obj_invalidate(lv_scr_act());
-	
+//	lv_obj_invalidate(lv_scr_act());
 	lv_refr_now(NULL);
+	
 	lv_obj_invalidate(lv_scr_act());
 
     printf("Task 2: Drawing Label 2...\n");
@@ -234,7 +234,7 @@ void* renderingThread(void* args)
     lv_obj_set_style_text_align(label3, LV_TEXT_ALIGN_CENTER, 0);
     lv_obj_align(label3, LV_ALIGN_TOP_MID, -170, 800);
 
-    sleep(5);
+    sleep(3);
 
 /*
 	char plate[]="WJX-58-73\n";
@@ -258,6 +258,12 @@ void* renderingThread(void* args)
 */
 
 	while(1){
+			render_output("ABC-12-34\n", "BIENVENIDO\n", true);\
+			sleep(3);
+			render_output("XYZ-56-78\n", "PAGO PENDIENTE\n", false);
+			sleep(3);
+	}
+	while(1){
 //    	pthread_mutex_lock(&mutex);
         printf("Task 2: Receiving message...\n");
         bytes_read = mq_receive(mq, receiving_buffer, MAX_SIZE, 0);
@@ -266,7 +272,6 @@ void* renderingThread(void* args)
 			user = (user_type*)(receiving_buffer);
 			printf("Message received!!\n");
 			printf("Message: %s, Plates = %s, Message = %s \n", user->pass ? "true":"false", user->plate, user->message);
-			render_output(user->plate, user->message, user->pass);
 		}
 //    	pthread_mutex_unlock(&mutex);
 		sleep(2);
