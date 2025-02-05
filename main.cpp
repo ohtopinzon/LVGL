@@ -21,13 +21,16 @@
 #define H_RES 1080
 #define V_RES 1920
 
+//#define H_RES 720
+//#define V_RES 1280
+
 #define DISP_BUF_SIZE H_RES * V_RES * 4 * 2
 
 #define QUEUE_NAME "/voice_queue"
 #define MAX_SIZE 1024
 #define QUEUE_PERMISSIONS 0666
 #define MAX_MESSAGES 10
-#define MAX_MSG_SIZE 256
+#define MAX_MSG_SIZE 500
 
 // Global Functions
 void hal_init();
@@ -40,7 +43,6 @@ lv_obj_t * label1;
 lv_obj_t * label2;
 lv_obj_t * label3;
 
-pthread_mutex_t mutex;
 
 void sig_handler(int signum)
 {
@@ -67,15 +69,9 @@ bool close_cb(lv_disp_t * disp)
 
 typedef struct{
 	bool pass;
-	char* plate;
-	char* message;	
+	char plate[20];
+	char message[200];	
 }user_type;
-
-typedef struct{
-    unsigned short id;
-    const char* name;
-}vit_command_t;
-
 
 int render_output(char* plate, char* message, bool pass)
 {	
@@ -107,7 +103,7 @@ int main(void)
     pthread_t thread1;
     pthread_t thread2;
 
-	pthread_mutex_init(&mutex, NULL);
+//	pthread_mutex_init(&mutex, NULL);
 	system("rm /dev/mqueue/voice_queue");
 
     pthread_create(&thread1, NULL, &sendingThread, NULL);
@@ -129,10 +125,22 @@ void* sendingThread(void* args)
 {
 	mqd_t mq;
 	struct mq_attr attr;
+	pthread_mutex_t mutex;
 	int status = 0;
 
 	printf("Task 1: Sending Thread called\n");
+
+	static user_type user = {true, "ABC-12-34", "BIENVENIDD"};
 	
+	attr.mq_flags = 0;
+	attr.mq_maxmsg = MAX_MESSAGES;
+	attr.mq_msgsize = MAX_MSG_SIZE;
+	attr.mq_curmsgs = 0;
+	
+	mq = mq_open(QUEUE_NAME, O_WRONLY | O_CREAT, QUEUE_PERMISSIONS, &attr);
+	if(mq == -1) perror("mq_open failure from Sending Thread");
+
+	printf("Task 1: Message Queue successfully created! \n");
 /*
 	user[1]->pass=false;
 	user[2]->pass=false;
@@ -164,22 +172,10 @@ void* sendingThread(void* args)
 	user[8]->plate="MTR-37-56";
 	user[9]->plate="KLZ-17-53";
 */
-	attr.mq_flags = 0;
-	attr.mq_maxmsg = MAX_MESSAGES;
-	attr.mq_msgsize = MAX_MSG_SIZE;
-	attr.mq_curmsgs = 0;
-	
-	mq = mq_open(QUEUE_NAME, O_WRONLY | O_CREAT, QUEUE_PERMISSIONS, &attr);
-	if(mq == -1) perror("mq_open failure from Sending Thread");
-
-	printf("Task 1: Message Queue successfully created! \n");
-	int index=0;
 	while(1){
 //    	pthread_mutex_lock(&mutex);
 			printf("Task 1: Sending message... \n");
-		    mq_send(mq, (const char*) user, sizeof(user_type), 0);
-			if (index>=9) index = 0;
-			else index++;
+		    mq_send(mq, (const char*) &user, sizeof(user_type), 0);
 			sleep(5);
 //    	pthread_mutex_unlock(&mutex);
 	} 
@@ -217,16 +213,7 @@ void* renderingThread(void* args)
 	lv_obj_invalidate(lv_scr_act());
 	
 	lv_refr_now(NULL);
-
-    printf("Task 2: Drawing Label 1...\n");
-    label1 = lv_label_create(lv_scr_act());
-    lv_label_set_long_mode(label1, LV_LABEL_LONG_WRAP);     /*Break the long lines*/
-    lv_label_set_recolor(label1, true);                      /*Enable re-coloring by commands in the text*/
-    lv_label_set_text(label1, "PLACAS:");
-	lv_obj_add_style(label1, &style, 0);
-    lv_obj_set_width(label1, 500);  /*Set smaller width to make the lines wrap*/
-    lv_obj_set_style_text_align(label1, LV_TEXT_ALIGN_CENTER, 0);
-    lv_obj_align(label1, LV_ALIGN_TOP_MID, -170, 100);
+	lv_obj_invalidate(lv_scr_act());
 
     printf("Task 2: Drawing Label 2...\n");
     label2 = lv_label_create(lv_scr_act());
@@ -282,7 +269,7 @@ void* renderingThread(void* args)
 			render_output(user->plate, user->message, user->pass);
 		}
 //    	pthread_mutex_unlock(&mutex);
-		sleep(5);
+		sleep(2);
 	}
 }
 
